@@ -1,0 +1,22 @@
+.game_box{
+    position: relative;
+    width: 480px;
+    height: 640px;
+    background-image: url(../imges/background.png);
+    margin: 0 auto;
+}
+.game_bottom{
+    width: 480px;
+    height: 80px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.bird{
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    width: 51px;
+    height: 40px;
+    background-image: url(../imges/bird.png);
+}
