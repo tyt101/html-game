@@ -31,6 +31,7 @@ function runGame() {
         timer = null
         game_restart.style.display = 'block'
     }
+    // 碰撞检测
     if(birdTop < 0){
         birdTop = 0
     }
@@ -50,18 +51,24 @@ function runGame() {
         pipe_bottom_l = 480
         pipe_bottom.style.top = 1*Math.random()*(-300)+500 + 'px'
     }
+    
+
     pipe_top.style.left = pipe_top_l + 'px'
     pipe_bottom.style.left = pipe_bottom_l + 'px'
 }
 initGame()
+gameOver()
 document.body.addEventListener("click",() => {
     if(timer){
         deltaTop = -10
         birdRation = -15
     }
 })
-game_restart.addEventListener("click",() => {
-    initGame()
-    game_restart.style.display = 'none'
-    console.log(game_restart.style.display)
-})
+function gameOver(){
+    game_restart.addEventListener("click",() => {
+        initGame()
+        game_restart.style.display = 'none'
+        console.log(game_restart.style.display)
+    })
+}
+

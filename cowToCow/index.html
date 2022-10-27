@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div id="app">
+        <div class="grids" v-for="item in grids" :key="item.id" @click="handleSelected(item)" :style="{left: bar_ids.includes(item.id) ? 500 + 80*bar_ids.indexOf(item.id) + 'px' : item.x + 'px', top: bar_ids.includes(item.id) ? 550 + 'px' : item.y + 'px'}">
+            <!-- 图片 -->
+            <img :src="`./imags/icon${item.type}.png`">
+            <!-- 遮罩层 -->
+            <div class="mask" v-show="!bar_ids.includes(item.id) && checkMaskShow(item)"></div>
+
+            <!-- 插槽 -->
+        </div>
+        <div class="bar"></div>
+    </div>
+
+
+
+    <script src="https://www.unpkg.com/vue@2.6.14/dist/vue.js"></script>
+    <script>
+        const vm = new Vue({
+            el:"#app",
+            data(){
+                return {
+                    grids:[],
+                    bar_ids:[],
+                    count:0
+                }
+            },
+            created(){
+                this.initCos()
+            },
+            methods:{
+                initCos(){
+                    for (let i = 0; i < 200; i++) {
+                        this.grids.push({
+                            id:i,
+                            type:parseInt(Math.random()*7)+1,
+                            x:parseInt(Math.random()*300)+600,
+                            y:parseInt(Math.random()*300)+100
+                        })
+                    }
+                },
+                checkMaskShow(cur){
+                    for (let i = 0; i < this.grids.length; i++) {
+                        const ele = this.grids[i];
+                        if(!this.bar_ids.includes(ele.id) && ele.id > cur.id && ele.x > cur.x - 80 && ele.x < cur.x + 80 && ele.y > cur.y - 90 && ele.y < cur.y + 90){
+                            return true
+                        }
+                    }
+                    return false
+                },
+                // 问题：无法解决达到三个找到对应的三个的id记录下来并从grids中删除掉
+                handleSelected(cur){
+                    // Todo达到三个就消除  待定
+                    // let count = 0
+                    // let deletedArr = []
+                    // for (let i = 0; i < this.bar_ids.length; i++) {
+                    //     if(this.grids[this.bar_ids[i]].type ===cur.type){
+                    //         count ++
+                    //         deletedArr.push(this.grids[this.bar_ids[i]])
+                    //     }
+                    // }
+                    
+                    
+                    if(this.bar_ids.length >= 7){
+                        alert('槽位已满，大侠请重新来过！')
+                        window.location.reload()
+                    }
+                    if(this.checkMaskShow(cur))return
+                    let idx = this.bar_types.lastIndexOf(cur.type)
+                    if(idx > -1){
+                        // 添加一个元素
+                        this.bar_ids.splice(idx + 1,0,cur.id)
+                    }else{
+                        this.bar_ids.push(cur.id)
+                    }
+                    
+                },
+            },
+            computed:{
+                bar_types(){
+                    return this.bar_ids.map(id => {
+                        for(let i = 0 ; i < this.grids.length; i++){
+                            if(this.grids[i].id === id){
+                                return this.grids[i].type
+                            }
+                        }
+                    })
+                }
+            },
+            watch:{
+                bar_ids:{
+                    handler(newVal){
+                        if(!newVal.length){
+                            alert("恭喜你，闯关成功")
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
